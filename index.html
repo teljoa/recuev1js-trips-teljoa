@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ViajesCode | Examen Final</title>
+    <link rel="stylesheet" href="./css/style.css">
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="brand">✈️ ViajesCode</div>
+        <div class="nav-info">Recuperación Bloque I + II</div>
+    </nav>
+
+    <div class="main-wrapper">
+        
+        <section class="catalog-panel">
+            <header class="catalog-header">
+                <h1>Destinos Disponibles</h1>
+                
+                <div class="search-box">
+                    <input type="text" id="searchInput" placeholder="Escribe para buscar (ej: Asia, Noruega...)">
+                </div>
+            </header>
+
+            <div id="destinations-grid" class="grid">
+
+            </div>
+        </section>
+
+        <aside class="sidebar">
+            
+            <div class="itinerary-box">
+                <h2>🗺️ Mi Itinerario</h2>
+                
+                <div id="itinerary-list" class="itinerary-list">
+                    
+                </div>
+                
+                <div class="total-section">
+                    <p>Total Estimado</p>
+                </div>
+            </div>
+
+            <div class="checkout-box">
+                <h2>Datos del Viajero</h2>
+                <form id="booking-form">
+                    <div class="form-group">
+                        <label>Nombre y Apellidos</label>
+                        <input type="text" id="nombre" placeholder="Ej: Ana García">
+                        <small class="hint">Debe incluir espacio intermedio</small>
+                    </div>
+                    <div class="form-group">
+                        <label>DNI / Pasaporte</label>
+                        <input type="text" id="dni" placeholder="12345678Z">
+                        <small class="hint">8 números y 1 letra al final</small>
+                    </div>
+                    <div class="form-group">
+                        <label>Fecha de Salida</label>
+                        <input type="date" id="fecha">
+                    </div>
+                    <button type="submit" id="btn-confirm" class="btn-confirm">
+                        CONFIRMAR RESERVA
+                    </button>
+                </form>
+                <div id="feedback-msg" class="feedback hidden"></div>
+            </div>
+        </aside>
+    </div>
+    <script src="./js/app.js"></script>
+</body>
+</html>

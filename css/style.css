@@ -1,0 +1,243 @@
+:root {
+    --primary: #6c5ce7;
+    --dark: #2d3436;
+    --light: #dfe6e9;
+    --white: #ffffff;
+    --success: #00b894;
+    --danger: #d63031;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', sans-serif; }
+
+body { background-color: #f8f9fa; color: var(--dark); padding-bottom: 50px; }
+
+.navbar {
+    background: var(--primary);
+    color: white;
+    padding: 1rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.brand { font-size: 1.5rem; font-weight: bold; }
+
+.main-wrapper {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 2rem;
+    max-width: 1200px;
+    margin: 2rem auto;
+    padding: 0 1rem;
+}
+
+/* HEADER Y BUSCADOR */
+.catalog-header { margin-bottom: 2rem; }
+.search-box input {
+    width: 100%;
+    padding: 12px;
+    border: 2px solid var(--light);
+    border-radius: 8px;
+    font-size: 1rem;
+    margin-top: 10px;
+}
+.search-box input:focus { border-color: var(--primary); outline: none; }
+
+/* GRID */
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 1.5rem;
+}
+
+.card {
+    background: white;
+    border-radius: 10px;
+    padding: 1.5rem;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    border-top: 5px solid var(--primary);
+}
+
+.card h3 { font-size: 1.2rem; margin-bottom: 0.5rem; text-transform: capitalize; }
+.card-region { color: #636e72; font-size: 0.9rem; margin-bottom: 1rem; text-transform: uppercase; letter-spacing: 1px; }
+.card-price { font-size: 1.5rem; color: var(--dark); font-weight: bold; }
+
+.btn-add {
+    width: 100%;
+    background: var(--primary);
+    color: white;
+    border: none;
+    padding: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 15px;
+    transition: background 0.2s;
+}
+.btn-add:hover { background: #5649c0; }
+.btn-add:disabled { background: #b2bec3; cursor: not-allowed; }
+
+/* SIDEBAR */
+.sidebar { display: flex; flex-direction: column; gap: 20px; }
+.itinerary-box, .checkout-box {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+}
+
+.itinerary-list {
+    margin: 15px 0;
+    max-height: 250px;
+    overflow-y: auto;
+    border-top: 1px solid #eee;
+}
+
+.itinerary-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px solid #eee;
+}
+.btn-remove { background: none; border: none; color: var(--danger); cursor: pointer; font-size: 1.1rem; }
+
+.total-section {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 1.2rem;
+    border-top: 2px solid var(--primary);
+    padding-top: 15px;
+}
+
+/* FORMULARIO */
+.form-group { margin-bottom: 15px; }
+.form-group label { display: block; margin-bottom: 5px; font-weight: 600; }
+.form-group input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid var(--light);
+    border-radius: 5px;
+}
+.hint { font-size: 0.75rem; color: #636e72; }
+
+/* Validaciones Visuales */
+.form-group input.error { border-color: var(--danger); background: #fff0f0; }
+.form-group input.success { border-color: var(--success); background: #f0fff4; }
+
+.btn-confirm {
+    width: 100%;
+    background: var(--success);
+    color: white;
+    border: none;
+    padding: 12px;
+    border-radius: 5px;
+    font-weight: bold;
+    cursor: pointer;
+}
+.btn-confirm:hover { background: #00a884; }
+
+.feedback {
+    margin-top: 10px;
+    padding: 10px;
+    border-radius: 5px;
+    text-align: center;
+    font-weight: bold;
+    background: #d4edda;
+    color: #155724;
+}
+.hidden { display: none; }
+
+@media (max-width: 800px) {
+    .main-wrapper { grid-template-columns: 1fr; }
+}
+
+/* ... resto del CSS igual ... */
+
+/* GRID TARJETAS */
+.card {
+    background: white;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.2s;
+    border: 1px solid #eee;
+}
+
+.card:hover { transform: translateY(-5px); border-color: var(--primary); }
+
+/* Estilo para tarjetas sin stock */
+.card.out-of-stock {
+    opacity: 0.6;
+    background-color: #f4f4f4;
+}
+
+/* Placeholder para la imagen */
+.card-img {
+    height: 140px;
+    background-color: #dfe6e9; /* Gris */
+    background-image: linear-gradient(45deg, #dfe6e9 25%, #b2bec3 25%, #b2bec3 50%, #dfe6e9 50%, #dfe6e9 75%, #b2bec3 75%, #b2bec3 100%);
+    background-size: 20px 20px;
+}
+
+.card-body { padding: 1.2rem; display: flex; flex-direction: column; gap: 10px; }
+
+.card-top { display: flex; justify-content: space-between; align-items: center; }
+
+.badge { 
+    background: var(--primary); 
+    color: white; 
+    font-size: 0.7rem; 
+    padding: 4px 8px; 
+    border-radius: 12px; 
+    text-transform: uppercase; 
+    letter-spacing: 0.5px;
+}
+
+.spots-badge { font-size: 0.75rem; color: #636e72; font-weight: bold; }
+.spots-badge.error { color: var(--danger); }
+
+.card h3 { font-size: 1.1rem; margin: 5px 0; font-weight: 700; }
+
+.card-price { 
+    font-size: 1.4rem; 
+    color: var(--dark); 
+    font-weight: 800; 
+}
+
+/* SIDEBAR - ITINERARIO */
+.itinerary-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 0;
+    border-bottom: 1px solid #eee;
+}
+
+.it-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.it-info strong { font-size: 0.95rem; }
+.it-info small { color: #636e72; font-size: 0.85rem; }
+
+.btn-remove {
+    background: #fff0f0;
+    border: 1px solid #ffcccc;
+    color: var(--danger);
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+}
+
+.btn-remove:hover { background: var(--danger); color: white; border-color: var(--danger); }

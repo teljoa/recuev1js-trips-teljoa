@@ -1,0 +1,9 @@
+{
+  "destinations": [
+    { "id": "1", "cod": "tokio_JPN_asia", "price_raw": "1200€", "spots": 5 },
+    { "id": "2", "cod": "cancun_MEX_america", "price_raw": "800€", "spots": 2 },
+    { "id": "3", "cod": "nairobi_KEN_africa", "price_raw": "1500€", "spots": 0 },
+    { "id": "4", "cod": "oslo_NOR_europa", "price_raw": "900€", "spots": 8 }
+  ],
+  "bookings": []
+}
