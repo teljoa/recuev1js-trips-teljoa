@@ -1,84 +1,139 @@
 const URL_BASE = "http://localhost:3000";
 
-const destinations = document.getElementById("destinations-grid");
-const search = document.getElementById("searchInput");
-const itinerary = document.getElementById("itinerary-list");
-const total = document.getElementById("total-price");
+const destinationsGrid = document.getElementById("destinations-grid");
+const searchInput = document.getElementById("searchInput");
+const itineraryList = document.getElementById("itinerary-list");
+const totalPrice = document.getElementById("total-price");
 const form = document.getElementById("booking-form");
 
-let destinatarions=[];
-let cart=[];
+let destinations = [];
+let cart = [];
 
-function mostrarDestinos(){
+//Funcion para mostrar destinos
+function loadDestinations() {
     fetch(`${URL_BASE}/destinations`)
-        .then(response=>response.json())
-        .then(destinatarionss=>{
-            destinatarions=destinatarionss;
-            rendertinatarions(destinatarions);
+        .then(res => res.json())
+        .then(data => {
+            destinations = data.map(d => {
+                let parts = d.cod.split("_");
+
+                return {
+                    id: d.id,
+                    title: `${parts[0].charAt(0).toUpperCase() + parts[0].slice(1)} (${parts[1]})`,
+                    region: parts[2].charAt(0).toUpperCase() + parts[2].slice(1),
+                    price: parseInt(d.price_raw.replace("€", "")),
+                    spots: d.spots
+                };
+            });
+            renderDestinations(destinations);
         })
-        .catch(error => console.log(error));
+        .catch(err => console.log(err));
 }
 
-function rendertinatarions(destinationss) {
-    destinationss.map(destination =>{
-        
-        let properties = destination.cod.split("_");
-        let precies = parseInt(destination.price_raw.replace("€",""));
-        
-        let destin={
-            id: destination.id,
-            title: `${properties[0].substring(0,1).toUpperCase()}${properties[0].substring(1)} (${properties[1]})`,
-            region:`${properties[2].substring(0,1).toUpperCase()}${properties[2].substring(1)}`,
-            price:precies,
-            spots:destination.spots
-        };
-        destinatarions.push(destin);
+//Funcion para renderizar destinos
+function renderDestinations(data) {
+    destinationsGrid.innerHTML = "";
 
-        let article= document.createElement("article");
+    data.forEach(dest => {
+        const article = document.createElement("article");
 
-        let cardImg= document.createElement("div");
+        const cardImg = document.createElement("div");
         cardImg.classList.add("card-img");
 
-        let cardBody= document.createElement("div");
-        cardBody.classList.add("card-body")
+        const cardBody = document.createElement("div");
+        cardBody.classList.add("card-body");
 
-        let cardTop= document.createElement("div");
+        const cardTop = document.createElement("div");
         cardTop.classList.add("card-top");
 
-        let badge= document.createElement("span");
+        const badge = document.createElement("span");
         badge.classList.add("badge");
-        badge.textContent=destin.region;
+        badge.textContent = dest.region;
 
-        let spotsBage= document.createElement("span");
-        spotsBage.classList.add("spots-badge");
-        spotsBage.textContent=destin.spots;
+        const spots = document.createElement("span");
+        spots.classList.add("spots-badge");
+        spots.textContent = dest.spots;
 
-        let title= document.createElement("h3");
-        title.textContent=destin.title;
+        cardTop.appendChild(badge);
+        cardTop.appendChild(spots);
 
-        let cardPrice= document.createElement("div");
-        cardPrice.classList.add("card-price");
-        cardPrice.textContent=destin.price;
+        const title = document.createElement("h3");
+        title.textContent = dest.title;
 
-        let btn= document.createElement("button");
-        btn.classList.add("btn-add");
-        btn.dataset.id=destin.id;
-        btn.textContent="Añadir al Itinerario";
+        const price = document.createElement("div");
+        price.classList.add("card-price");
+        price.textContent = dest.price + "€";
 
-        cardTop.append(badge,spotsBage);
-        article.append(cardImg,cardBody,cardTop,title,cardPrice,btn);
-        destinations.appendChild(article);
-    })
+        const button = document.createElement("button");
+        button.classList.add("btn-add");
+        button.textContent = "Añadir al Itinerario";
+
+        button.addEventListener("click", () => {
+            addToCart(dest.id);
+        });
+
+        cardBody.appendChild(cardTop);
+        cardBody.appendChild(title);
+        cardBody.appendChild(price);
+        cardBody.appendChild(button);
+
+        article.appendChild(cardImg);
+        article.appendChild(cardBody);
+
+        destinationsGrid.appendChild(article);
+    });
 }
-function addCart(id){
-    const destin = destinatarions.find(d => d.id == id);
-    const item = destinatarions.find(i=>id ==id);
 
-    if(!item){
-        cart.push(item);
-    } 
-    updateCart();
+//Funcion para añadir al carrito
+function addToCart(id) {
+    const dest = destinations.find(d => d.id == id);
+
+    if (!cart.some(item => item.id == id)) {
+        cart.push(dest);
+    }
+
+    renderCart();
 }
 
+//Funcion para renderizar carrito
+function renderCart() {
+    itineraryList.innerHTML = "";
 
-mostrarDestinos()
+    cart.forEach(item => {
+        const div = document.createElement("div");
+        div.classList.add("itinerary-item");
+
+        const title = document.createElement("p");
+        title.textContent = item.title;
+
+        const price = document.createElement("span");
+        price.textContent = item.price + "€";
+
+        div.appendChild(title);
+        div.appendChild(price);
+
+        itineraryList.appendChild(div);
+    });
+
+    updateTotal();
+}
+
+//Funcion para calcular el total
+function updateTotal() {
+    let total = cart.reduce((acc, item) => acc + item.price, 0);
+    totalPrice.textContent = total + "€";
+}
+
+//Evento del buscador
+searchInput.addEventListener("input", () => {
+    let value = searchInput.value.toLowerCase();
+
+    let filtered = destinations.filter(d =>
+        d.title.toLowerCase().includes(value) ||
+        d.region.toLowerCase().includes(value)
+    );
+
+    renderDestinations(filtered);
+});
+
+loadDestinations()
