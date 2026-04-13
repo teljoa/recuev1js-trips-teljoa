@@ -6,8 +6,27 @@ const itineraryList = document.getElementById("itinerary-list");
 const totalPrice = document.getElementById("total-price");
 const form = document.getElementById("booking-form");
 
+const inputNombre = document.getElementById("nombre");
+const inputDni = document.getElementById("dni");
+const inputFecha = document.getElementById("fecha");
+const feedback = document.getElementById("feedback-msg");
+
 let destinations = [];
 let cart = [];
+
+//Funcion para juardar el carrito
+function saveCart() {
+    localStorage.setItem("cart", JSON.stringify(cart));
+}
+
+//Funcion para cargar carrito
+function loadCart() {
+    const data = localStorage.getItem("cart");
+    if (data) {
+        cart = JSON.parse(data);
+        renderCart();
+    }
+}
 
 //Funcion para mostrar destinos
 function loadDestinations() {
@@ -92,6 +111,7 @@ function addToCart(id) {
         cart.push(dest);
     }
 
+    saveCart();
     renderCart();
 }
 
@@ -135,5 +155,7 @@ searchInput.addEventListener("input", () => {
 
     renderDestinations(filtered);
 });
+
+
 
 loadDestinations()
