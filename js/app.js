@@ -11,6 +11,9 @@ const inputDni = document.getElementById("dni");
 const inputFecha = document.getElementById("fecha");
 const feedback = document.getElementById("feedback-msg");
 
+const regexNombre = /^[A-Za-zÁÉÍÓÚáéíóúñÑ]+\s[A-Za-zÁÉÍÓÚáéíóúñÑ]+$/;
+const regexDni = /^[0-9]{8}[A-Za-z]$/;
+
 let destinations = [];
 let cart = [];
 
@@ -156,6 +159,110 @@ searchInput.addEventListener("input", () => {
     renderDestinations(filtered);
 });
 
+//Variables para validaciones en tiempo real
+const showError = (input, message) => {
+    const formField = input.parentElement;
+    formField.classList.add("error");
+    const error = formField.querySelector("small");
+    error.textContent = message;
+};
 
+const showSuccess = (input) => {
+    const formField = input.parentElement;
+    formField.classList.remove("error");
+    const error = formField.querySelector("small");
+    error.textContent = "";
+};
 
-loadDestinations()
+//Comprobar valores de los imputs
+const checkNombre = () => {
+    const value = inputNombre.value.trim();
+    if (value === "") {
+        showError(inputNombre, "Campo obligatorio");
+        return false;
+    } else if (!regexNombre.test(value)) {
+        showError(inputNombre, "Nombre y apellido con espacio");
+        return false;
+    }
+    showSuccess(inputNombre);
+    return true;
+};
+
+const checkDni = () => {
+    const value = inputDni.value.trim();
+    if (value === "") {
+        showError(inputDni, "Campo obligatorio");
+        return false;
+    } else if (!regexDni.test(value)) {
+        showError(inputDni, "8 números y 1 letra");
+        return false;
+    }
+    showSuccess(inputDni);
+    return true;
+};
+
+const checkFecha = () => {
+    const value = inputFecha.value;
+    if (value === "") {
+        showError(inputFecha, "Selecciona fecha");
+        return false;
+    }
+    showSuccess(inputFecha);
+    return true;
+};
+
+form.addEventListener("input", (e) => {
+    switch (e.target.id) {
+        case "nombre":
+            checkNombre();
+            break;
+        case "dni":
+            checkDni();
+            break;
+        case "fecha":
+            checkFecha();
+            break;
+    }
+});
+
+//POST
+form.addEventListener("submit", (e) => {
+    e.preventDefault();
+
+    const valid = checkNombre() && checkDni() && checkFecha();
+    if (!valid) return;
+
+    if (cart.length === 0) {
+        feedback.textContent = "Añade destinos";
+        feedback.classList.remove("hidden");
+        return;
+    }
+
+    const booking = {
+        nombre: inputNombre.value.trim(),
+        dni: inputDni.value.trim(),
+        fecha: inputFecha.value,
+        destinos: cart,
+        total: cart.reduce((acc, d) => acc + d.price, 0),
+        createdAt: new Date().toISOString()
+    };
+
+    fetch(`${URL_BASE}/bookings`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(booking)
+    });
+
+    feedback.textContent = "Reserva realizada ✅";
+    feedback.classList.remove("hidden");
+
+    cart = [];
+    saveCart();
+    renderCart();
+    form.reset();
+});
+
+loadDestinations();
+loadCart();
